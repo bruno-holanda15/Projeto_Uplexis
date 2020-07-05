@@ -11,10 +11,5 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function busca()
-    {
-        return view('busca',['message'=>'']);
-    }
-
 
 }

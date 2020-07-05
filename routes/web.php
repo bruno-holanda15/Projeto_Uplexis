@@ -18,7 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/buscar-artigos','Controller@busca');
 
 Auth::routes();
 
