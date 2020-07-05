@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use DOMDocument;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\DomCrawler\Crawler;
+use App\Artigo;
+
 
 class HomeController extends Controller
 {
@@ -40,29 +43,46 @@ class HomeController extends Controller
                 "query" => [ "s" => $nomeArtigo],
                 "verify" => false,
                 "headers" => [
-                    "Accept" => "text/html"
-                    
+                    "Accept" => "text/html"                   
                 ]
-
             ]
         );
 
         $body = $response->getBody();
         $crawler = new Crawler();
         $crawler->addHtmlContent($body);
+
+        //Titulos
         $elementoTitulos = $crawler->filter('div.title');
         $titulos = [];
         foreach($elementoTitulos as $titulo){
             $titulos[] = $titulo->textContent;
         }
 
+        if(count($titulos) <= 0){
+            return response()->json(['Erro'],400);
+        }
+
+        //Links
         $elementoLinks = $crawler->selectLink('Continue Lendo');
         $links = [];
         foreach ($elementoLinks as $link ) {
-            $link = $crawler->filterXPath('/a')->attr('href');
-            $links[] = $link;
+            $linkNode = new Crawler($link);
+            $links[] = $linkNode->attr('href');
         }
-        var_dump($links);
-        
+        $user = Auth::user();
+        $arrayFinal = [];
+
+        for ($i=0; $i < count($links); $i++) { 
+            $arrayFinal[] = [
+                'link' => $links[$i],
+                'titulo' => $titulos[$i],
+                'id_usuario' => $user->id
+            ];
+        }
+        Artigo::insert($arrayFinal);
+
+        return response()->json(['Sucesso'],200);
+
     }
 }
