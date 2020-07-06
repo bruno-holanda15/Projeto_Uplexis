@@ -14,7 +14,7 @@
                     <label for="artigo">Digite o artigo</label>
                     <input type="text" class="form-control" name="artigo" name="artigo">
                 </div>
-                <button class="btn btn-dark"> Pesquisar </button>
+                <button class="btn btn-dark"> Capturar </button>
             </form>  
         </div>
 @endsection
