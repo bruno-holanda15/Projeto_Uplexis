@@ -22,5 +22,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/listar', 'HomeController@listar');
 Route::post('/executa-crawler', 'HomeController@crawler');
+Route::delete('/deletar/{id}', 'HomeController@deletar');
+Route::delete('/deletar-todos', 'HomeController@deletarTodos');
+
+
 

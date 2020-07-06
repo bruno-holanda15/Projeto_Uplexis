@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.uplexis_projeto', 'Projeto Uplexis')}}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -30,6 +30,9 @@
                 @if (Auth::user())
                 <a class="navbar-brand" href="{{ url('/home') }}">
                    Buscar artigos
+                </a>
+                <a class="navbar-brand" href="{{ url('/listar') }}">
+                   Listar artigos adicionados
                 </a>
                 @endif
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">

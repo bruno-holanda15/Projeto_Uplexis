@@ -27,9 +27,41 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
+    {   
+        $mensagem = $request->session()->get('mensagem');
+        $request->session()->remove('mensagem');
+        return view('home',compact('mensagem'));
+    }
+
+    public function listar()
     {
-        return view('home');
+        $user = Auth::user();
+        $artigos = Artigo::where('id_usuario',$user->id)->get();
+        return view('lista',compact('artigos'));
+    }
+
+    public function deletar(Request $request)
+    {
+        $artigo = Artigo::find($request->id);
+        $artigo->delete();
+
+        $request->session()->flash(
+            "mensagem",
+            "Artigo com id $request->id excluido"
+        );
+        return redirect("home");
+    }
+
+    public function deletarTodos(Request $request)
+    {
+        Artigo::truncate();
+     
+        $request->session()->flash(
+            "mensagem",
+            "Todos artigos deletados"
+        );
+        return redirect("home");
     }
 
     public function crawler(Request $request)
@@ -60,7 +92,12 @@ class HomeController extends Controller
         }
 
         if(count($titulos) <= 0){
-            return response()->json(['Erro'],400);
+            
+            $request->session()->flash(
+                'mensagem',
+                'Não foi localizado artigo com esse titulo, tente outro!'
+            );
+            return redirect('/home');
         }
 
         //Links
@@ -82,7 +119,12 @@ class HomeController extends Controller
         }
         Artigo::insert($arrayFinal);
 
-        return response()->json(['Sucesso'],200);
+        $request->session()->flash(
+            'mensagem',
+            'Adicionado artigos'
+        );
+
+        return redirect('/home');
 
     }
 }

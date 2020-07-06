@@ -2,6 +2,11 @@
 
 @section('content')
 <div class="container mt-5">
+        @if(!empty($mensagem))
+            <div class="alert alert-info">
+                {{ $mensagem }}
+            </div>
+        @endif
             <h2>Página de busca</h2>
             <form action="/executa-crawler" method="POST" class="mt-4">
             @csrf
